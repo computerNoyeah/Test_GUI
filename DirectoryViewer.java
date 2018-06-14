@@ -14,6 +14,7 @@ import javafx.stage.DirectoryChooser;
 import javafx.stage.Stage;
 import javafx.scene.image.ImageView;
 import javafx.scene.image.Image;
+import javax.imageio.ImageIO;
 
 public class DirectoryViewer extends Application {
 
@@ -29,9 +30,7 @@ public class DirectoryViewer extends Application {
         //LinearLayout.LayoutParams parms = new LinearLayout.LayoutParams(width,height);
         //d.setLayoutParams(parms);
 
-        Image image = new Image("cs4001.PNG");
         d.setPreserveRatio(true);
-        d.setImage(image);
 
         Button c = new Button("Load Folder");
 
@@ -44,17 +43,17 @@ public class DirectoryViewer extends Application {
                     Alert alert = new Alert(AlertType.ERROR);
                     alert.setHeaderText("Could not open directory");
                     alert.setContentText("The file is invalid.");
-
                     alert.showAndWait();
                 } else {
                     a.setRoot(getNodesForDirectory(choice));
                 }
+                Image image = new Image(new File("file:///" + choice + "\\" + "game.jpg").toString());
+                d.setImage(image);
             }
         });
         b.setTop(c);
         b.setCenter(a);
         b.setRight(d);
-
 
         primaryStage.setScene(new Scene(b, 800, 500));
         primaryStage.setTitle("Folder View");
