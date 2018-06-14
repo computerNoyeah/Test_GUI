@@ -22,7 +22,7 @@ public class DirectoryViewer extends Application {
         TreeView<String> a = new TreeView<String>();
         BorderPane b = new BorderPane();
         ImageView d = new ImageView();
-        d.setFitWidth(200);
+        d.setFitWidth(500);
         d.setFitHeight(500);
 //        int width = 60;
 //        int height = 60;
@@ -30,7 +30,9 @@ public class DirectoryViewer extends Application {
         //d.setLayoutParams(parms);
 
         Image image = new Image("cs4001.PNG");
+        d.setPreserveRatio(true);
         d.setImage(image);
+
         Button c = new Button("Load Folder");
 
         c.setOnAction(new EventHandler<ActionEvent>() {
@@ -54,7 +56,7 @@ public class DirectoryViewer extends Application {
         b.setRight(d);
 
 
-        primaryStage.setScene(new Scene(b, 600, 400));
+        primaryStage.setScene(new Scene(b, 800, 500));
         primaryStage.setTitle("Folder View");
         primaryStage.show();
     }
