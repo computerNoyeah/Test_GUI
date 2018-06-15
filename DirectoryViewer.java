@@ -14,15 +14,20 @@ import javafx.stage.DirectoryChooser;
 import javafx.stage.Stage;
 import javafx.scene.image.ImageView;
 import javafx.scene.image.Image;
+
 import javax.imageio.ImageIO;
 
 public class DirectoryViewer extends Application {
+    ImageView d = new ImageView();
+    TreeView<String> a = new TreeView<String>();
+    File choice;
+//    Image image = new Image("");
 
     @Override
     public void start(Stage primaryStage) {
-        TreeView<String> a = new TreeView<String>();
+
+
         BorderPane b = new BorderPane();
-        ImageView d = new ImageView();
         d.setFitWidth(500);
         d.setFitHeight(500);
 //        int width = 60;
@@ -35,11 +40,12 @@ public class DirectoryViewer extends Application {
         Button c = new Button("Load Folder");
 
         c.setOnAction(new EventHandler<ActionEvent>() {
-            @Override public void handle(ActionEvent e) {
+            @Override
+            public void handle(ActionEvent e) {
                 DirectoryChooser dc = new DirectoryChooser();
                 dc.setInitialDirectory(new File(System.getProperty("user.home")));
-                File choice = dc.showDialog(primaryStage);
-                if(choice == null || ! choice.isDirectory()) {
+                choice = dc.showDialog(primaryStage);
+                if (choice == null || !choice.isDirectory()) {
                     Alert alert = new Alert(AlertType.ERROR);
                     alert.setHeaderText("Could not open directory");
                     alert.setContentText("The file is invalid.");
@@ -47,13 +53,22 @@ public class DirectoryViewer extends Application {
                 } else {
                     a.setRoot(getNodesForDirectory(choice));
                 }
-                Image image = new Image(new File("file:///" + choice + "\\" + "game.jpg").toString());
-                d.setImage(image);
+
             }
         });
+
         b.setTop(c);
         b.setCenter(a);
         b.setRight(d);
+
+        a.getSelectionModel()
+                .selectedItemProperty()
+                .addListener((observable, oldValue, newValue) -> {
+                    Image image = new Image("file:///" + choice + "\\" + (String) newValue.getValue());
+                    
+                    d.setImage(image);
+                    System.out.println("Selected Text : " + newValue.getValue());}
+                );
 
         primaryStage.setScene(new Scene(b, 800, 500));
         primaryStage.setTitle("Folder View");
@@ -66,12 +81,17 @@ public class DirectoryViewer extends Application {
 
     public TreeItem<String> getNodesForDirectory(File directory) { //Returns a TreeItem representation of the specified directory
         TreeItem<String> root = new TreeItem<String>(directory.getName());
-        for(File f : directory.listFiles()) {
+        for (File f : directory.listFiles()) {
             System.out.println("Loading " + f.getName());
-            if(f.isDirectory()) { //Then we call the function recursively
+            if (f.isDirectory()) { //Then we call the function recursively
                 root.getChildren().add(getNodesForDirectory(f));
             } else {
                 root.getChildren().add(new TreeItem<String>(f.getName()));
+                System.out.println(directory.getName());
+                System.out.println(f.getName());
+//                Image image = new Image(new File("file:///" + directory.getName() + "\\" + f).toString());
+//                d.setImage(image);
+
             }
         }
         return root;
