@@ -64,8 +64,8 @@ public class DirectoryViewer extends Application {
         a.getSelectionModel()
                 .selectedItemProperty()
                 .addListener((observable, oldValue, newValue) -> {
-                    Image image = new Image("file:///" + choice + "\\" + (String) newValue.getValue());
-                    
+                    System.out.println("Re " + choice);
+                    Image image = new Image("file:///" + choice + "\\" + newValue.getValue() + "\\" + "game.jpg");
                     d.setImage(image);
                     System.out.println("Selected Text : " + newValue.getValue());}
                 );
@@ -83,15 +83,10 @@ public class DirectoryViewer extends Application {
         TreeItem<String> root = new TreeItem<String>(directory.getName());
         for (File f : directory.listFiles()) {
             System.out.println("Loading " + f.getName());
-            if (f.isDirectory()) { //Then we call the function recursively
-                root.getChildren().add(getNodesForDirectory(f));
-            } else {
+            if (f.isDirectory()) {
                 root.getChildren().add(new TreeItem<String>(f.getName()));
                 System.out.println(directory.getName());
                 System.out.println(f.getName());
-//                Image image = new Image(new File("file:///" + directory.getName() + "\\" + f).toString());
-//                d.setImage(image);
-
             }
         }
         return root;
