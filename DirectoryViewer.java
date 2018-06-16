@@ -1,4 +1,5 @@
 import java.io.File;
+import java.io.IOException;
 
 import javafx.application.Application;
 import javafx.event.ActionEvent;
@@ -22,7 +23,7 @@ public class DirectoryViewer extends Application {
     TreeView<String> a = new TreeView<String>();
     File choice;
 //    Image image = new Image("");
-
+    String str;
     @Override
     public void start(Stage primaryStage) {
 
@@ -38,6 +39,8 @@ public class DirectoryViewer extends Application {
         d.setPreserveRatio(true);
 
         Button c = new Button("Load Folder");
+        Button open = new Button("Open Folder");
+
 
         c.setOnAction(new EventHandler<ActionEvent>() {
             @Override
@@ -57,7 +60,20 @@ public class DirectoryViewer extends Application {
             }
         });
 
+        open.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                try {
+                    Runtime.getRuntime().exec("explorer.exe /select, " + str);
+                    System.out.println("opner " + str);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+
         b.setTop(c);
+        b.setLeft(open);
         b.setCenter(a);
         b.setRight(d);
 
@@ -65,7 +81,10 @@ public class DirectoryViewer extends Application {
                 .selectedItemProperty()
                 .addListener((observable, oldValue, newValue) -> {
                     System.out.println("Re " + choice);
+                    str = "file:///" + choice + "\\" + newValue.getValue();
+                    System.out.printf(str);
                     Image image = new Image("file:///" + choice + "\\" + newValue.getValue() + "\\" + "game.jpg");
+                    //The above game part needs to be changed so that it can read any image file under that.
                     d.setImage(image);
                     System.out.println("Selected Text : " + newValue.getValue());}
                 );
